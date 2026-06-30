@@ -44,8 +44,12 @@ Sift gets you most of the way there. It doesn't replace manually skimming the un
 ```bash
 git clone https://github.com/laghab/sift.git
 cd sift
+python -m venv venv
+source venv/bin/activate   # Windows: venv\Scripts\activate
 pip install -e .
 ```
+
+Prefer a venv to avoid PEP 668 "externally managed environment" errors on modern Linux distros. If you'd rather skip the venv, `pipx install .` works too — it installs the entry points globally in an isolated environment.
 
 System dependencies (Tesseract is required; FFmpeg only if you'll use `--video`):
 

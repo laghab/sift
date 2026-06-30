@@ -4,6 +4,8 @@ import sys
 import os
 import platform
 
+from ._bundled import is_frozen, bundled_bin, bundled_tessdata
+
 
 def run(cmd, capture=True):
     try:
@@ -14,10 +16,15 @@ def run(cmd, capture=True):
 
 
 def which(name):
+    if is_frozen():
+        if bundled_bin(name):
+            return True
     return shutil.which(name) is not None
 
 
 def check_tesseract():
+    if is_frozen():
+        return True, bundled_tessdata() is not None
     if which("tesseract"):
         ok, out = run(["tesseract", "--list-langs"])
         has_eng = "eng" in out if out else False
@@ -26,6 +33,8 @@ def check_tesseract():
 
 
 def check_ffmpeg():
+    if is_frozen():
+        return True
     return which("ffmpeg") and which("ffprobe")
 
 
@@ -86,6 +95,9 @@ def install_ffmpeg():
 
 
 def ensure_deps(need_video=False):
+    if is_frozen():
+        return []
+
     if platform.system() == "Windows":
         print("  Windows detected — Sift requires system binaries.")
         _windows_manual_instructions()

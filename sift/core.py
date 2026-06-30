@@ -9,6 +9,7 @@ from pathlib import Path
 
 from .banner import color
 from .progress import ProgressTracker
+from ._bundled import is_frozen, bundled_bin, bundled_tessdata
 
 
 IMG_EXTENSIONS = (".jpg", ".jpeg", ".png")
@@ -25,11 +26,40 @@ def count_meaningful_words(text):
     return count
 
 
+def _tesseract_cmd():
+    if is_frozen():
+        return bundled_bin("tesseract") or "tesseract"
+    return "tesseract"
+
+
+def _ffmpeg_cmd():
+    if is_frozen():
+        return bundled_bin("ffmpeg") or "ffmpeg"
+    return "ffmpeg"
+
+
+def _ffprobe_cmd():
+    if is_frozen():
+        return bundled_bin("ffprobe") or "ffprobe"
+    return "ffprobe"
+
+
+def _ocr_env():
+    env = {**os.environ, "OMP_THREAD_LIMIT": "1"}
+    td = bundled_tessdata()
+    if td is not None:
+        env["TESSDATA_PREFIX"] = td
+    return env
+
+
 def ocr_image(img_path, lang="eng"):
     try:
+        cmd = [_tesseract_cmd(), str(img_path), "stdout", "--psm", "3", "-l", lang]
+        if bundled_tessdata() is not None:
+            cmd += ["--tessdata-dir", bundled_tessdata()]
         r = subprocess.run(
-            ["tesseract", str(img_path), "stdout", "--psm", "3", "-l", lang],
-            capture_output=True, text=True, timeout=60, env={**os.environ, "OMP_THREAD_LIMIT": "1"}
+            cmd,
+            capture_output=True, text=True, timeout=60, env=_ocr_env()
         )
         return r.stdout.strip()
     except (subprocess.TimeoutExpired, FileNotFoundError, OSError):
@@ -143,7 +173,7 @@ def scan_videos(directory, lang="eng", workers=None, progress=None, min_words=5,
     def get_duration(video_path):
         try:
             r = subprocess.run(
-                ["ffprobe", "-v", "error", "-show_entries", "format=duration",
+                [_ffprobe_cmd(), "-v", "error", "-show_entries", "format=duration",
                  "-of", "csv=p=0", str(video_path)],
                 capture_output=True, text=True, timeout=30
             )
@@ -163,7 +193,7 @@ def scan_videos(directory, lang="eng", workers=None, progress=None, min_words=5,
         tmpdir = tempfile.mkdtemp(prefix="sift_video_")
         try:
             subprocess.run(
-                ["ffmpeg", "-i", str(video_path), "-vf", f"fps=1/{interval}",
+                [_ffmpeg_cmd(), "-i", str(video_path), "-vf", f"fps=1/{interval}",
                  "-q:v", "5", f"{tmpdir}/frame%03d.jpg", "-y"],
                 capture_output=True, timeout=120, env={**os.environ, "OMP_THREAD_LIMIT": "1"}
             )
