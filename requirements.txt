@@ -1,0 +1,7 @@
+# Sift has zero pip dependencies.
+# It shells out to system-installed binaries: tesseract (required) and ffmpeg (optional, for video).
+# On Linux, python3-tk is needed for the GUI (sift-gui).
+# Install system deps:
+#   apt: sudo apt-get install tesseract-ocr tesseract-ocr-eng ffmpeg python3-tk
+#   brew: brew install tesseract tesseract-lang ffmpeg
+#   pacman: sudo pacman -S tesseract tesseract-data-eng ffmpeg
