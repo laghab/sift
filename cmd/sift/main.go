@@ -17,12 +17,12 @@ import (
 	"github.com/laghab/sift/internal/scanner"
 )
 
-var version = "1.1.0"
+var version = "v1.1.0"
 
 func main() {
 	for _, a := range os.Args[1:] {
 		if a == "--version" || a == "-V" {
-			fmt.Printf("Sift v%s\n", version)
+			fmt.Printf("Sift %s\n", version)
 			os.Exit(0)
 		}
 	}
