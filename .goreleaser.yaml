@@ -16,10 +16,8 @@ builds:
       - linux
     goarch:
       - amd64
-    flags:
-      - -tags=static
     ldflags:
-      - -s -w -X main.version={{.Version}} -extldflags '-static'
+      - -s -w -X main.version={{.Version}}
 
 archives:
   - formats: tar.gz
