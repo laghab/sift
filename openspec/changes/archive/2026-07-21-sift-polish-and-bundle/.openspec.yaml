@@ -1,0 +1,5 @@
+schema: spec-driven
+created: 2026-07-21
+goal: Polish Sift to production-ready quality with proper testing, fix known
+  bugs, add missing features, and create distributable packages (PyInstaller
+  standalone binary + pipx install) that eliminate system dependency friction.

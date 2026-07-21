@@ -1,0 +1,4 @@
+schema: spec-driven
+created: 2026-07-21
+goal: Ship working Go binary with zero install friction. One tag, one CI run,
+  one verified download.

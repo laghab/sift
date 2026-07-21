@@ -1,0 +1,5 @@
+schema: spec-driven
+created: 2026-07-21
+goal: Eliminate all installation friction. One binary, no Python, no Tesseract
+  install, no FFmpeg install. Ship as a single static executable for
+  Linux/macOS/Windows.

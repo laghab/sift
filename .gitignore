@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+venv/
+.venv/
+.DS_Store
+
+# Go
+sift
+dist/
+*.exe
+
+# Python (legacy)
+*.egg-info/
+build/
+*.spec

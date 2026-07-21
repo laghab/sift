@@ -1,0 +1,65 @@
+version: 2
+
+project_name: sift
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - id: sift-linux
+    main: ./cmd/sift
+    binary: sift
+    env:
+      - CGO_ENABLED=1
+      - CC=gcc
+    goos:
+      - linux
+    goarch:
+      - amd64
+      - arm64
+    flags:
+      - -tags=static
+    ldflags:
+      - -s -w -X main.version={{.Version}} -extldflags '-static'
+
+  - id: sift-windows
+    main: ./cmd/sift
+    binary: sift
+    env:
+      - CGO_ENABLED=1
+      - CC=x86_64-w64-mingw32-gcc
+    goos:
+      - windows
+    goarch:
+      - amd64
+    flags:
+      - -tags=static
+    ldflags:
+      - -s -w -X main.version={{.Version}} -extldflags '-static'
+
+archives:
+  - id: sift
+    builds:
+      - sift-linux
+      - sift-windows
+    formats: tar.gz
+    format_overrides:
+      - goos: windows
+        formats: zip
+    files:
+      - LICENSE
+      - README.md
+
+checksum:
+  name_template: "checksums.txt"
+
+snapshot:
+  version_template: "{{ .Tag }}"
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
