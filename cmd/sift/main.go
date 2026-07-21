@@ -17,7 +17,7 @@ import (
 	"github.com/laghab/sift/internal/scanner"
 )
 
-var version = "1.0.0"
+var version = "1.1.0"
 
 func main() {
 	for _, a := range os.Args[1:] {
