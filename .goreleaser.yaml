@@ -7,20 +7,29 @@ before:
     - go mod tidy
 
 builds:
-  - id: sift-linux
+  - id: sift
     main: ./cmd/sift
     binary: sift
     env:
-      - CGO_ENABLED=1
+      - CGO_ENABLED=0
     goos:
       - linux
+      - darwin
+      - windows
     goarch:
       - amd64
+      - arm64
+    ignore:
+      - goos: windows
+        goarch: arm64
     ldflags:
       - -s -w -X main.version={{.Version}}
 
 archives:
   - formats: tar.gz
+    format_overrides:
+      - goos: windows
+        formats: zip
     files:
       - LICENSE
       - README.md

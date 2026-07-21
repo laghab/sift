@@ -78,15 +78,6 @@ func main() {
 		fmt.Fprintln(os.Stderr)
 	}
 
-	tessdataDir := ocr.TessdataDir()
-	if err := ocr.EnsureTessdata(tessdataDir); err != nil {
-		fmt.Fprintf(os.Stderr, "  Error setting up OCR data: %v\n", err)
-		os.Exit(1)
-	}
-	if tessdataDir != "" {
-		os.Setenv("TESSDATA_PREFIX", tessdataDir)
-	}
-
 	o, err := ocr.New(cfg.Lang)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "  Error initializing OCR: %v\n", err)

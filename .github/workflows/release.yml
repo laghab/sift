@@ -22,11 +22,6 @@ jobs:
         with:
           go-version: stable
 
-      - name: Install system deps
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libtesseract-dev libleptonica-dev
-
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v6
         with:
