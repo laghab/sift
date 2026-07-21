@@ -5,7 +5,7 @@ venv/
 .DS_Store
 
 # Go
-sift
+/sift
 dist/
 *.exe
 
